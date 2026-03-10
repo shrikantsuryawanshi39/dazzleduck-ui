@@ -17,6 +17,7 @@ const Logging = () => {
         cancelQuery,
         saveSession,
         loadSession,
+        loadSessionFromUrl,
         restoreSession,
         connectionInfo,
     } = useLogging();
@@ -54,6 +55,7 @@ const Logging = () => {
     const sessionManagement = useSessionManagement(
         saveSession,
         loadSession,
+        loadSessionFromUrl,
         restoreSession,
         queryManagement.rows,
         connectionForm.populateConnectionData,
@@ -91,6 +93,7 @@ const Logging = () => {
                 fileInputRef={sessionManagement.fileInputRef}
                 handleSaveSession={sessionManagement.handleSaveSession}
                 handleOpenSession={sessionManagement.handleOpenSession}
+                handleImportFromUrl={sessionManagement.handleImportFromUrl}
                 openFileDialog={sessionManagement.openFileDialog}
             />
 

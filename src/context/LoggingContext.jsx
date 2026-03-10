@@ -404,6 +404,33 @@ export const LoggingProvider = ({ children }) => {
         });
     }, []);
 
+    // --- Load Session from URL ---
+    const loadSessionFromUrl = useCallback(async (url) => {
+        try {
+            const trimmedUrl = url.trim();
+
+            // Validate URL protocol - only allow HTTP/HTTPS
+            if (!trimmedUrl.startsWith("http://") && !trimmedUrl.startsWith("https://")) {
+                throw new Error("Only HTTP and HTTPS URLs are supported");
+            }
+
+            const response = await axios.get(trimmedUrl);
+            const sessionData = response.data;
+
+            // Validate session data structure
+            if (!sessionData.connection || !sessionData.queries) {
+                throw new Error("Invalid session file format");
+            }
+
+            return sessionData;
+        } catch (err) {
+            if (err.response) {
+                throw new Error(`Failed to fetch session: ${err.response.status} ${err.response.statusText}`);
+            }
+            throw new Error("Failed to load session from URL: " + err.message);
+        }
+    }, []);
+
     // --- Restore Session ---
     const restoreSession = useCallback(async (sessionData) => {
         const { connection, queries } = sessionData;
@@ -435,6 +462,7 @@ export const LoggingProvider = ({ children }) => {
                 cancelQuery,
                 saveSession,
                 loadSession,
+                loadSessionFromUrl,
                 restoreSession,
                 connectionInfo,
             }}>

@@ -30,7 +30,7 @@ The Arrow JS Frontend is a feature-rich web application that connects to the Daz
 - **Charts:** D3.js for custom chart visualizations
 - **Testing:** Vitest with React Testing Library
 - **Icons:** React Icons (Heroicons, React Icons)
-- **UUID Generation:** uuidv4
+- **UUID Generation:** uuid
 
 ---
 
