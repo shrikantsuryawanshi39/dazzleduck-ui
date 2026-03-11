@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export const useSessionManagement = (
     saveSession,
@@ -109,6 +109,30 @@ export const useSessionManagement = (
     const openFileDialog = () => {
         fileInputRef.current?.click();
     };
+
+    // Auto-import from URL parameter on mount
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionUrl = urlParams.get('session');
+
+        if (sessionUrl) {
+            const loadFromUrl = async () => {
+                try {
+                    const sessionData = await loadSessionFromUrl(sessionUrl);
+                    await restoreSession(sessionData);
+
+                    populateConnectionData(sessionData);
+                    restoreRows(sessionData.queries || []);
+
+                    showPopup(`Session loaded from URL. Please enter password and click Connect.`, "success");
+                } catch (err) {
+                    showPopup("Failed to auto-load session from URL: " + err.message, "error");
+                }
+            };
+
+            loadFromUrl();
+        }
+    }, []);
 
     return {
         fileInputRef,

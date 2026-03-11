@@ -95,6 +95,7 @@ const Logging = () => {
                 handleOpenSession={sessionManagement.handleOpenSession}
                 handleImportFromUrl={sessionManagement.handleImportFromUrl}
                 openFileDialog={sessionManagement.openFileDialog}
+                sessionName={sessionManagement.sessionName}
             />
 
             {/* Tabs */}

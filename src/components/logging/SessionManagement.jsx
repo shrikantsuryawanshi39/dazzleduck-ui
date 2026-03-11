@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { MdHttp } from "react-icons/md";
 
 const SessionManagement = ({
     isConnected,
@@ -19,8 +18,12 @@ const SessionManagement = ({
 
     const handleImportUrl = () => {
         handleImportFromUrl(sessionUrl);
-        setSessionUrl("");
     };
+
+    const handleOpenFileDialog = () => {
+        openFileDialog();
+        setUrlMode(false);
+    }
 
     return (
         <div className="mt-4 pt-4 border-t border-gray-300 space-y-2">
@@ -42,51 +45,42 @@ const SessionManagement = ({
                 className="hidden"
             />
 
-            {urlMode ? (
+            {urlMode && (
                 <div className="space-y-2">
                     <input
                         type="url"
                         value={sessionUrl}
                         onChange={(e) => setSessionUrl(e.target.value)}
                         placeholder="https://example.com/session.json"
-                        className="w-full border border-gray-400 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-400 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <div className="flex gap-2">
-                        <button
-                            onClick={handleUrlModeToggle}
-                            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 rounded-lg transition cursor-pointer"
-                        >
-                            Back
-                        </button>
-                        <button
-                            onClick={handleImportUrl}
-                            disabled={!sessionUrl.trim()}
-                            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                        >
-                            Import
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <div className="flex rounded-lg overflow-hidden">
-                    {/* Main button for file import */}
-                    <button
-                        onClick={openFileDialog}
-                        className="w-full flex-1 pl-20 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 transition cursor-pointer"
-                    >
-                        Open Session
-                    </button>
-
-                    {/* URL section with different color */}
-                    <button
-                        onClick={handleUrlModeToggle}
-                        className="w-20 bg-purple-800 hover:bg-purple-900 text-white flex items-center justify-center transition cursor-pointer"
-                        title="Import from URL"
-                    >
-                        <MdHttp size={35} />
-                    </button>
                 </div>
             )}
+
+            <div className="flex gap-2">
+                <button
+                    onClick={handleOpenFileDialog}
+                    className="flex-1 bg-purple-700 hover:bg-purple-800 text-white font-medium py-2 rounded-lg transition cursor-pointer"
+                >
+                    Local
+                </button>
+
+                {urlMode && sessionUrl.trim() ? (
+                    <button
+                        onClick={handleImportUrl}
+                        className="flex-1 bg-indigo-800 hover:bg-indigo-900 text-white font-medium py-2 rounded-lg transition cursor-pointer"
+                    >
+                        Import
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleUrlModeToggle}
+                        className="flex-1 bg-purple-700 hover:bg-purple-800 text-white font-medium py-2 rounded-lg transition cursor-pointer"
+                    >
+                        {urlMode ? "Cancel" : "Remote"}
+                    </button>
+                )}
+            </div>
         </div>
     );
 };
