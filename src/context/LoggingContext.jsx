@@ -371,7 +371,8 @@ export const LoggingProvider = ({ children }) => {
             },
             queries: currentQueries.map(q => ({
                 query: q.query,
-                variables: q.variables || {}
+                variables: q.variables || {},
+                resultTitle: q.resultTitle || ""
             }))
         };
     }, [connectionInfo]);

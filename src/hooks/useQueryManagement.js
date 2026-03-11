@@ -5,7 +5,7 @@ const DEFAULT_VIEW = "table";
 
 export const useQueryManagement = (executeQuery, cancelQuery, isConnected, connection) => {
     const [rows, setRows] = useState([
-        { id: "1-" + uuid(), showPanel: true, query: "", view: DEFAULT_VIEW, variables: {} },
+        { id: "1-" + uuid(), showPanel: true, query: "", view: DEFAULT_VIEW, variables: {}, resultTitle: "" },
     ]);
     const [results, setResults] = useState({});
     const [queryIds, setQueryIds] = useState({});
@@ -47,7 +47,7 @@ export const useQueryManagement = (executeQuery, cancelQuery, isConnected, conne
         const newId = nextId.current++ + "-" + uuid();
         setRows((prev) => [
             ...prev,
-            { id: newId, showPanel: true, query: "", view: DEFAULT_VIEW, variables: {} },
+            { id: newId, showPanel: true, query: "", view: DEFAULT_VIEW, variables: {}, resultTitle: "" },
         ]);
     };
 
@@ -250,7 +250,7 @@ export const useQueryManagement = (executeQuery, cancelQuery, isConnected, conne
     };
 
     const resetRows = () => {
-        setRows([{ id: "1-" + uuid(), showPanel: true, query: "", view: DEFAULT_VIEW, variables: {} }]);
+        setRows([{ id: "1-" + uuid(), showPanel: true, query: "", view: DEFAULT_VIEW, variables: {}, resultTitle: "" }]);
         setResults({});
         setQueryIds({});
         nextId.current = 2;
@@ -263,13 +263,21 @@ export const useQueryManagement = (executeQuery, cancelQuery, isConnected, conne
                 showPanel: true,
                 query: q.query,
                 view: DEFAULT_VIEW,
-                variables: q.variables || {}
+                variables: q.variables || {},
+                resultTitle: q.resultTitle || ""
             }));
 
             setRows(restoredRows);
             nextId.current = queries.length + 1;
             setResults({});
         }
+    };
+
+    const toggleAllRows = () => {
+        const allCollapsed = rows.every(row => !row.showPanel);
+        setRows(prev =>
+            prev.map(r => ({ ...r, showPanel: allCollapsed }))
+        );
     };
 
     return {
@@ -287,6 +295,7 @@ export const useQueryManagement = (executeQuery, cancelQuery, isConnected, conne
         clearRowLogs,
         resetRows,
         restoreRows,
+        toggleAllRows,
         searchData,
         searchLoading,
         searchError,

@@ -14,7 +14,11 @@ export const useSessionManagement = (
 
     const handleSaveSession = async () => {
         try {
-            const currentQueries = rows.map(row => ({ query: row.query, variables: row.variables }));
+            const currentQueries = rows.map(row => ({
+                query: row.query,
+                variables: row.variables,
+                resultTitle: row.resultTitle || ""
+            }));
             const sessionData = saveSession(currentQueries);
             const json = JSON.stringify(sessionData, null, 2);
 
