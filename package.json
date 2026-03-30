@@ -12,13 +12,10 @@
     "src/components/package/DazzleduckUI.jsx",
     "src/components/package/utils"
   ],
-  "homepage": "https://github.com/dazzleduck-web/dazzleduck-ui#readme",
+  "homepage": "https://github.com/dazzleduck-web/dazzleduck-ui/tree/main/src/components/package/LIBRARY.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/dazzleduck-web/dazzleduck-ui.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dazzleduck-web/dazzleduck-ui/issues"
   },
   "keywords": [
     "dazzleduck",
