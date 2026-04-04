@@ -99,6 +99,7 @@ const DazzleduckUI = ({ tab, jwt, config, view = "table", width, height }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
     const [searchError, setSearchError] = useState("");
 
     // Validate required props
@@ -142,20 +143,20 @@ const DazzleduckUI = ({ tab, jwt, config, view = "table", width, height }) => {
 
     // Memoize filtered search data for performance
     const filteredSearchData = useMemo(() => {
-        return filterDataBySearch(data, searchQuery);
-    }, [data, searchQuery]);
+        return filterDataBySearch(data, debouncedSearchQuery);
+    }, [data, debouncedSearchQuery]);
+
+    // Debounced search handler - updates the debounced query after 300ms
+    const debouncedSearchHandler = useCallback((query) => {
+        setDebouncedSearchQuery(query);
+    }, []);
+
+    const handleSearch = useDebounce(debouncedSearchHandler, 300);
 
     // Clear search errors when query changes
     useEffect(() => {
         setSearchError("");
-    }, [searchQuery]);
-
-    // Debounced search handler
-    const debouncedSearchHandler = useCallback((query) => {
-        setSearchQuery(query);
-    }, []);
-
-    const handleSearch = useDebounce(debouncedSearchHandler, 300);
+    }, [debouncedSearchQuery]);
 
     // Loading state
     if (loading) {
@@ -176,8 +177,8 @@ const DazzleduckUI = ({ tab, jwt, config, view = "table", width, height }) => {
                     data={filteredSearchData}
                     loading={false}
                     searchQuery={searchQuery}
-                    setSearchQuery={handleSearch}
-                    onSearch={() => {}}
+                    setSearchQuery={setSearchQuery}
+                    onSearch={handleSearch}
                     error={searchError}
                 />
             );
